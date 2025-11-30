@@ -12,7 +12,7 @@ module.exports = {
   STORAGE_PATH: path.join(__dirname, '../../storage'),
   
   // Chunk size for upload/download (100MB)
-  CHUNK_SIZE: 100 * 1024 * 1024,
+  CHUNK_SIZE: 50 * 1024 * 1024,
   
   // Max file size (5GB)
   MAX_FILE_SIZE: 5 * 1024 * 1024 * 1024

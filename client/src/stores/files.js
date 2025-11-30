@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import api from '../api'
 
-const CHUNK_SIZE = 100 * 1024 * 1024 // 100MB
+const CHUNK_SIZE = 50 * 1024 * 1024 // 100MB
 
 export const useFilesStore = defineStore('files', () => {
   const currentPath = ref('')
