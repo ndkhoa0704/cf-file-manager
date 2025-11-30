@@ -19,29 +19,29 @@ router.get('/', authenticate, requireAdmin, (req, res) => {
 router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
     const { username, password, role = 'user' } = req.body;
-    
+
     if (!username || !password) {
       return res.status(400).json({ error: 'Username and password required' });
     }
-    
+
     if (username.length < 3) {
       return res.status(400).json({ error: 'Username must be at least 3 characters' });
     }
-    
+
     if (password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
-    
+
     if (!['admin', 'user'].includes(role)) {
       return res.status(400).json({ error: 'Invalid role' });
     }
-    
+
     // Check if username exists
     const existing = User.findByUsername(username);
     if (existing) {
       return res.status(400).json({ error: 'Username already exists' });
     }
-    
+
     const user = await User.create(username, password, role);
     res.status(201).json(user);
   } catch (error) {
@@ -54,16 +54,16 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 router.delete('/:id', authenticate, requireAdmin, (req, res) => {
   try {
     const userId = parseInt(req.params.id);
-    
+
     if (userId === req.user.id) {
       return res.status(400).json({ error: 'Cannot delete yourself' });
     }
-    
+
     const user = User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     User.delete(userId);
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
@@ -75,18 +75,18 @@ router.delete('/:id', authenticate, requireAdmin, (req, res) => {
 // Reset user password (admin only)
 router.post('/:id/reset-password', authenticate, requireAdmin, (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = Number(req.params.id);
     const { newPassword } = req.body;
-    
+
     if (!newPassword || newPassword.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
-    
+
     const user = User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     User.updatePassword(userId, newPassword);
     res.json({ message: 'Password reset successfully' });
   } catch (error) {
