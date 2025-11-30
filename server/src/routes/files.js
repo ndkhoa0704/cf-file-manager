@@ -378,9 +378,9 @@ router.get('/download/info', authenticate, (req, res) => {
 router.get('/download/chunk', authenticate, (req, res) => {
     try {
         const { path: filePath, chunk } = req.query;
-        const chunkIndex = parseInt(chunk);
+        const chunkIndex = Number(chunk);
 
-        if (!filePath || isNaN(chunkIndex)) {
+        if (!filePath || Number.isNaN(chunkIndex)) {
             return res.status(400).json({ error: 'File path and chunk index required' });
         }
 
