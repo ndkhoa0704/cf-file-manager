@@ -170,6 +170,18 @@ onUnmounted(() => {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
+@media (max-width: 768px) {
+  .context-menu {
+    min-width: 200px;
+    max-width: calc(100vw - 32px);
+  }
+
+  .menu-item {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+}
+
 .menu-item {
   display: flex;
   align-items: center;

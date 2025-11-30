@@ -116,14 +116,14 @@ function formatSize(bytes) {
             <circle cx="9" cy="7" r="4"/>
             <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
           </svg>
-          Users
+          <span class="btn-text">Users</span>
         </button>
         
         <button class="btn btn-ghost" @click="authStore.logout">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
             <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
           </svg>
-          Logout
+          <span class="btn-text">Logout</span>
         </button>
       </div>
     </header>
@@ -156,7 +156,7 @@ function formatSize(bytes) {
             <line x1="12" y1="11" x2="12" y2="17"/>
             <line x1="9" y1="14" x2="15" y2="14"/>
           </svg>
-          New Folder
+          <span class="btn-text">New Folder</span>
         </button>
         
         <button class="btn btn-primary btn-sm" @click="fileInput.click()">
@@ -165,7 +165,7 @@ function formatSize(bytes) {
             <polyline points="17 8 12 3 7 8"/>
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
-          Upload
+          <span class="btn-text">Upload</span>
         </button>
         <input 
           ref="fileInput" 
@@ -274,7 +274,7 @@ function formatSize(bytes) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: 12px 16px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -283,6 +283,8 @@ function formatSize(bytes) {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .logo {
@@ -293,6 +295,7 @@ function formatSize(bytes) {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .logo svg {
@@ -308,12 +311,14 @@ function formatSize(bytes) {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  white-space: nowrap;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .user-badge {
@@ -325,6 +330,7 @@ function formatSize(bytes) {
   border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .role-tag {
@@ -337,6 +343,45 @@ function formatSize(bytes) {
   letter-spacing: 0.5px;
 }
 
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 12px;
+  }
+
+  .header-left h1 {
+    font-size: 16px;
+  }
+
+  .header-right {
+    gap: 4px;
+  }
+
+  .user-badge {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .user-badge .role-tag {
+    display: none;
+  }
+
+  .header-right .btn {
+    padding: 8px;
+  }
+
+  .header-right .btn-text {
+    display: none;
+  }
+
+  .header-right .btn svg {
+    margin: 0;
+  }
+}
+
+.btn-text {
+  display: inline;
+}
+
 /* Toolbar */
 .toolbar {
   display: flex;
@@ -345,12 +390,22 @@ function formatSize(bytes) {
   padding: 12px 24px;
   background: var(--bg-tertiary);
   border-bottom: 1px solid var(--border-subtle);
+  gap: 12px;
 }
 
 .breadcrumbs {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.breadcrumbs::-webkit-scrollbar {
+  display: none;
 }
 
 .breadcrumb-item {
@@ -365,6 +420,8 @@ function formatSize(bytes) {
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .breadcrumb-item:hover {
@@ -378,11 +435,46 @@ function formatSize(bytes) {
 
 .breadcrumb-sep {
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .toolbar-actions {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .breadcrumbs {
+    order: 2;
+  }
+
+  .toolbar-actions {
+    order: 1;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .toolbar-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .toolbar-actions .btn-text {
+    display: inline;
+  }
+
+  .breadcrumb-item {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
 }
 
 /* File List */
@@ -394,6 +486,14 @@ function formatSize(bytes) {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 12px;
   align-content: start;
+}
+
+@media (max-width: 768px) {
+  .file-list-container {
+    padding: 12px;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 }
 
 .file-list-container.dragging {
@@ -515,6 +615,36 @@ function formatSize(bytes) {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .back-item {
+    padding: 12px;
+  }
+
+  .back-item .file-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .loading-state,
+  .empty-state {
+    padding: 40px 16px;
+  }
+
+  .empty-state .empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .empty-state h3 {
+    font-size: 16px;
+  }
+
+  .empty-state p {
+    font-size: 13px;
+  }
 }
 </style>
 

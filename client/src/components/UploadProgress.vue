@@ -89,6 +89,29 @@ function formatSize(bytes) {
   border-bottom: 1px solid var(--border-subtle);
 }
 
+@media (max-width: 768px) {
+  .progress-container {
+    padding: 10px 12px;
+  }
+
+  .progress-item {
+    padding: 10px 12px;
+  }
+
+  .progress-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .progress-filename {
+    font-size: 12px;
+  }
+
+  .progress-size {
+    font-size: 11px;
+  }
+}
+
 .progress-item {
   display: flex;
   align-items: center;

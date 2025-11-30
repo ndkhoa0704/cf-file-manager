@@ -116,6 +116,17 @@ const showPassword = ref(false)
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .login-page {
+    padding: 16px;
+  }
+
+  .bg-glow {
+    width: 400px;
+    height: 400px;
+  }
+}
+
 .bg-grid {
   position: absolute;
   inset: 0;
@@ -156,6 +167,35 @@ const showPassword = ref(false)
   padding: 48px 40px;
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 32px 24px;
+    border-radius: var(--radius-md);
+  }
+
+  .brand-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .brand-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-title {
+    font-size: 24px;
+  }
+
+  .brand-subtitle {
+    font-size: 13px;
+  }
+
+  .login-form {
+    gap: 16px;
+  }
 }
 
 .brand {

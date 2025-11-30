@@ -112,7 +112,7 @@ function formatDate(date) {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
             <polyline points="15 18 9 12 15 6"/>
           </svg>
-          Back to Files
+          <span class="btn-text">Back to Files</span>
         </button>
       </div>
       
@@ -135,7 +135,7 @@ function formatDate(date) {
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
-          Add User
+          <span class="btn-text">Add User</span>
         </button>
       </div>
 
@@ -151,7 +151,7 @@ function formatDate(date) {
         <button class="btn btn-secondary" @click="loadUsers">Retry</button>
       </div>
 
-      <!-- Users Table -->
+      <!-- Users Table (Desktop) -->
       <div v-else class="users-table-container">
         <table class="users-table">
           <thead>
@@ -207,6 +207,64 @@ function formatDate(date) {
             </tr>
           </tbody>
         </table>
+
+        <!-- Mobile Card Layout -->
+        <div class="users-cards">
+          <div 
+            v-for="user in users" 
+            :key="user.id" 
+            class="user-card"
+            :class="{ current: user.id === authStore.user?.id }"
+          >
+            <div class="user-card-header">
+              <div class="user-cell">
+                <div class="user-avatar">
+                  {{ user.username.charAt(0).toUpperCase() }}
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span>{{ user.username }}</span>
+                    <span v-if="user.id === authStore.user?.id" class="you-badge">You</span>
+                  </div>
+                  <span class="role-badge" :class="user.role" style="margin-top: 4px; display: inline-block;">
+                    {{ user.role }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="user-card-body">
+              <div class="user-card-row">
+                <span class="user-card-label">Created</span>
+                <span>{{ formatDate(user.created_at) }}</span>
+              </div>
+            </div>
+            <div class="user-card-actions">
+              <button 
+                class="btn btn-secondary btn-sm"
+                @click="openResetPassword(user)"
+                style="flex: 1;"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+                Reset Password
+              </button>
+              <button 
+                v-if="user.id !== authStore.user?.id"
+                class="btn btn-danger btn-sm"
+                @click="deleteUser(user)"
+                style="flex: 1;"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -334,12 +392,16 @@ function formatDate(date) {
   padding: 16px 24px;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-subtle);
+  gap: 12px;
 }
 
 .header h1 {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
+  flex: 1;
+  min-width: 0;
+  text-align: center;
 }
 
 .header-left,
@@ -347,6 +409,30 @@ function formatDate(date) {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .header h1 {
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .header-left .btn-text {
+    display: none;
+  }
+
+  .header-left .btn {
+    padding: 8px;
+  }
+}
+
+.btn-text {
+  display: inline;
 }
 
 .user-badge {
@@ -384,11 +470,33 @@ function formatDate(date) {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
+  gap: 12px;
 }
 
 .content-header h2 {
   font-size: 20px;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .content-header {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+
+  .content-header h2 {
+    font-size: 18px;
+  }
+
+  .content-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Loading/Error states */
@@ -462,6 +570,80 @@ function formatDate(date) {
 
 .users-table tr.current {
   background: rgba(0, 212, 255, 0.05);
+}
+
+/* Mobile card layout */
+.users-cards {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .users-table-container {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .users-table {
+    display: none;
+  }
+
+  .users-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .user-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .user-card.current {
+    background: rgba(0, 212, 255, 0.05);
+    border-color: var(--accent-cyan);
+  }
+
+  .user-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .user-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .user-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+
+  .user-card-label {
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .user-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .user-card-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
 }
 
 .user-cell {
@@ -544,6 +726,36 @@ function formatDate(date) {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .modal-backdrop {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .modal {
+    max-width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 16px;
+  }
+
+  .modal-body {
+    padding: 20px 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
 }
 
 .modal-header {

@@ -182,6 +182,42 @@ function handleDownload() {
   height: 22px;
 }
 
+@media (max-width: 768px) {
+  .file-item {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .file-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .file-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .file-name {
+    font-size: 13px;
+  }
+
+  .file-meta {
+    font-size: 11px;
+  }
+
+  .download-btn {
+    width: 32px;
+    height: 32px;
+    opacity: 1;
+  }
+
+  .download-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
 .file-icon.folder {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(153, 51, 255, 0.15));
   color: var(--accent-cyan);
