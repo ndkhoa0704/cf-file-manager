@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const config = require('../config');
 
 function User() {
-    const SELF = {
+    return {
         findById: (id) => {
             const stmt = db.prepare('SELECT id, username, role, storage_path, created_at FROM users WHERE id = ?');
             return stmt.get(id);
@@ -20,8 +20,6 @@ function User() {
             const stmt = db.prepare('SELECT id, username, role, storage_path, created_at FROM users ORDER BY created_at DESC');
             return stmt.all();
         },
-    }
-    return {
         create: async (username, password, role = 'user') => {
             // Hash password
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,7 +38,7 @@ function User() {
             );
 
             const result = stmt.run(username, hashedPassword, role, storagePath);
-            return SELF.findById(result.lastInsertRowid);
+            return module.exports.findById(result.lastInsertRowid);
         },
 
         verifyPassword: async (user, password) => {
@@ -48,7 +46,7 @@ function User() {
         },
 
         delete: (id) => {
-            const user = SELF.findById(id);
+            const user = module.exports.findById(id);
             if (user) {
                 // Delete user's storage folder
                 const fullStoragePath = path.join(config.STORAGE_PATH, user.storage_path);
