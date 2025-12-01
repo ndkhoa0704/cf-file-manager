@@ -6,7 +6,7 @@ const config = require('../config');
 
 
 function UploadSession() {
-    return {
+    const SELF = {
         findById: (id) => {
             const stmt = db.prepare('SELECT * FROM upload_sessions WHERE id = ?');
             return stmt.get(id);
@@ -15,6 +15,9 @@ function UploadSession() {
             const stmt = db.prepare('SELECT * FROM upload_sessions WHERE user_id = ? ORDER BY created_at DESC');
             return stmt.all(userId);
         },
+    }
+    return {
+
         create: (userId, filename, totalSize, totalChunks, targetPath) => {
             const id = uuidv4();
             const tempPath = path.join(config.STORAGE_PATH, '.temp', id);
@@ -30,7 +33,7 @@ function UploadSession() {
             `);
 
             stmt.run(id, userId, filename, totalSize, totalChunks, tempPath, targetPath);
-            return this.findById(id);
+            return SELF.findById(id);
         },
 
         updateChunkCount: (id, uploadedChunks) => {
@@ -38,7 +41,7 @@ function UploadSession() {
             return stmt.run(uploadedChunks, id);
         },
         delete: (id) => {
-            const session = this.findById(id);
+            const session = SELF.findById(id);
             if (session && fs.existsSync(session.temp_path)) {
                 fs.rmSync(session.temp_path, { recursive: true, force: true });
             }
@@ -52,7 +55,7 @@ function UploadSession() {
             const oldSessions = stmt.all(cutoff);
 
             for (const session of oldSessions) {
-                this.delete(session.id);
+                module.exports.delete(session.id);
             }
 
             return oldSessions.length;
